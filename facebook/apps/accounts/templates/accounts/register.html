@@ -1,23 +1,221 @@
-{% extends "base.html" %}
 {% load static %}
-{% block head %}
-<link rel="stylesheet" type="text/css" href="{% static 'css/forms.css' %}">
-{% endblock %}
-{% block content %}
-{% load crispy_forms_tags %}
-<style type="text/css">
-	.asteriskField {
-    	display: none;
-}
-</style>
-<div class="container">
-	<form method="POST" enctype="multipart/form-data">
-		<legend>Join Today</legend>
-		<hr>
-		{% csrf_token %}
-		{{ form|crispy }}
 
-		<button type="submit">Register</button>
-	</form>
-</div>
-{% endblock %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>HobNob</title>
+	<style>
+		body {
+			margin: 0;
+			font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto,
+			"Helvetica Neue", "Fira Sans", Ubuntu, Oxygen, "Oxygen Sans", Cantarell,
+			"Droid Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Emoji",
+			"Segoe UI Symbol", "Lucida Grande", Helvetica, Arial, sans-serif;
+		}
+
+		.nav__base {
+			height: 8px;
+			background-color: #283e4a;
+		}
+
+		.app__content {
+			text-align: center;
+			padding: 24px;
+		}
+
+		.header__logo {
+			padding: 32px 0 24px 0;
+		}
+
+		.header__logo img {
+			width: 100px;
+			height: 100px;
+			position: relative;
+		}
+
+		.header__content__heading {
+			font-size: 1.5rem;
+			line-height: 1.33333;
+			font-weight: 600;
+			color: rgba(0, 0, 0, 0.9);
+			padding: 0 0 4px 0;
+		}
+
+		.header__content__subheading {
+			line-height: 1.75;
+			color: rgba(0, 0, 0, 0.6);
+		}
+
+		.form__input--floating {
+			margin: 0 0 12px 0;
+		}
+
+		.form__input--floating input {
+			padding: 26px 12px 3px;
+			font-size: 1.125rem;
+			width: 100%;
+			box-sizing: border-box;
+			border-radius: 2px;
+			border: 1px solid rgba(0, 0, 0, 0.6);
+			z-index: 1;
+			position: relative;
+			background: transparent;
+			color: rgba(0, 0, 0, 0.9);
+		}
+
+		.form__label--floating {
+			position: absolute;
+			font-size: 1.125rem;
+			color: rgba(0, 0, 0, 0.9);
+			padding: 14px 0 0 12px;
+			transition: 0.2s all;
+		}
+
+		.form__label--floating.transform {
+			transform: translateY(-10px);
+			font-size: 0.9rem;
+		}
+
+		.show-password__button {
+		}
+
+		.login__form .login__form_action_container {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.login__form .login__form_action_container--multiple-actions button {
+			margin: 4px 4px 12px 4px;
+			flex: 1;
+			height: 52px;
+			border-radius: 2px;
+			font-family: inherit;
+			font-weight: 600;
+			font-size: 1rem;
+		}
+
+		.btn__primary--large {
+			background-color: #0073b1;
+			border: none;
+			color: #fff;
+		}
+
+		.btn__secondary--large {
+			background-color: #fff;
+			border: 1px solid #0073b1;
+			color: #0073b1;
+		}
+
+		a {
+			color: #0073b1;
+		}
+
+		form {
+			margin-bottom: 24px;
+		}
+
+		@media screen and (min-width: 770px) {
+			.login__form .login__form_action_container {
+				flex-direction: row;
+			}
+
+			form {
+				max-width: 384px;
+				margin-left: auto;
+				margin-right: auto;
+			}
+		}
+
+	</style>
+</head>
+<body>
+	<div id="app__container">
+		<header>
+			<div class="nav__base"></div>
+		</header>
+		<main class="app__content">
+			<div class="header__logo">
+				<img src="{% static 'images/logo.png' %}">
+			</div>
+			<div class="header__content">
+				<h1 class="header__content__heading">Welcome</h1>
+				<p class="header__content__subheading">Don't miss your next opportunity. Sign in to stay updated on your professional world.</p>
+			</div>
+
+			<form class="login__form" method="POST">
+				{% csrf_token %}
+				<div class="form__input--floating">
+					<label class="form__label--floating" id="label--name" >Username</label>
+					<input id="input--name" name="username" required>
+				</div>
+				<div class="form__input--floating">
+					<label class="form__label--floating" id="label--email">Email or Phone</label>
+					<input id="input--email" name="email" required>
+				</div>
+				<div class="form__input--floating">
+					<label class="form__label--floating" id="label--password">Password</label>
+					<input id="input--password" type="password" name="password1" required>
+				</div>
+				<div class="form__input--floating">
+					<label class="form__label--floating" id="label--password" >Confirm Password</label>
+					<input id="input--password" type="password" name="password2" required>
+				</div>
+				<div class="login__form_action_container login__form_action_container--multiple-actions">
+					<button class="btn__primary--large from__button--floating" type="submit" aria-label="Sign in">Sign Up</button>
+					<button class="btn__secondary--large from__button--floating" aria-label="Cancel">Cancel</button>
+				</div>
+			</form>
+			<div>
+				<p style="color: red;">{{ error }}</p>
+			</div>
+			<div class="footer-app-content-actions">
+	
+				<p>
+					Have an account?
+					<a href="{% url 'login' %}">Log In</a>
+				</p>
+			</div>
+
+
+		</main>
+	</div>
+
+
+
+
+
+
+	<script type="text/javascript" >
+			document.getElementById("input--email").addEventListener("focus", function() {
+			document.getElementById("label--email").classList.add("transform")
+		})
+
+		document.getElementById("input--email").addEventListener("blur", function() {
+			if (document.getElementById("input--email").value === "")
+				document.getElementById("label--email").classList.remove("transform")
+		})
+
+		document.getElementById("input--name").addEventListener("focus", function() {
+			document.getElementById("label--name").classList.add("transform")
+		})
+
+		document.getElementById("input--name").addEventListener("blur", function() {
+			if (document.getElementById("input--name").value === "")
+				document.getElementById("label--name").classList.remove("transform")
+		})
+
+		document.getElementById("input--password").addEventListener("focus", function() {
+			document.getElementById("label--password").classList.add("transform")
+		})
+
+		document.getElementById("input--password").addEventListener("blur", function() {
+			if (document.getElementById("input--password").value === "")
+				document.getElementById("label--password").classList.remove("transform")
+		})
+
+</script>
+
+</body>
+</html>

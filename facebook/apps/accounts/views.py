@@ -10,26 +10,37 @@ from facebook.apps.posts.models import Post
 
 
 def register_view(request):
+	context = {}
+	template_name = "accounts/register.html"
 	if request.method == "POST":
-		register_form = RegisterForm(request.POST)
-		if register_form.is_valid():
-			register_form.save()
-			username = register_form.cleaned_data["username"]
-			user = User.objects.get(username=username)
-			create_profile(user)
+		print(request.POST)
+		data = request.POST.copy()
+		username = data.pop('username')[0]
+		email = data.pop('email')[0]
+		password1 = data.pop('password1')[0]
+		password2 = data.pop('password2')[0]
+
+		if User.objects.filter(username= username):
+			context['error'] = 'Username already exists'
+			return render(request, template_name, context)
+		elif User.objects.filter(email= email):
+			context['error'] = 'Email already registered'
+			return render(request, template_name, context)
+		elif password1 != password2:
+			context['error'] = 'Password mismatch'
+			return render(request, template_name, context)
+		else:
+			new_user = User.objects.create(username=username, email = email)
+			new_user.set_password(password1)
+			new_user.save()
+			create_profile(new_user)
 			messages.success(request, "Account successfully created!")
 			return redirect("login")
-		else:
-			for error in register_form.errors.values():
-				messages.error(request, f'{error}')
 
 	else:
 		register_form = RegisterForm()
 
-	template_name = "accounts/register.html"
-	context = {
-	"form":register_form
-	}
+	context["form"] = register_form
 	return render(request, template_name, context)
 
 def create_profile(user):
